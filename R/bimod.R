@@ -1,0 +1,32 @@
+`bimod` <-
+function(x, data, annot, do.mapping=FALSE, mapping, model=c("E", "V"), do.scale=TRUE, verbose=FALSE, ...) {
+	require(mclust)
+	model <- match.arg(model)
+	dd <- sig.score(x=x, data=data, annot=annot, do.mapping=do.mapping, mapping=mapping, verbose=verbose, ...)$score
+	if(do.scale) { dd <- (rescale(x=dd, q=0.05, na.rm=TRUE) - 0.5) * 2 }
+	cc.ix <- complete.cases(dd)
+
+	mystatus <- mystatus.proba <- rep(NA, nrow(data))
+	names(mystatus) <- names(mystatus.proba) <- dimnames(data)[[1]]
+	res <- matrix(NA, nrow=3, ncol=2, dimnames=list(c("mean", "variance", "proportion"), paste("cluster", 1:2, sep=".")))
+	
+	#How many Gaussians?
+	rr <- Mclust(data=dd[cc.ix], modelNames=model, G=1:10)
+	oo <- order(rr$BIC, decreasing=TRUE)[1]
+	if(oo != 2) { warning(sprintf("%i is the most likely number of Gaussians!", oo)) }
+
+	#Only 2 Gaussians
+	rr2 <- Mclust(data=dd[cc.ix], modelNames=model, G=2)
+	if(is.null(rr2[[1]])) { ## EM algorithm did not converge
+		return(list("status"=mystatus, "status1.proba"=mystatus.proba, "gaussians"=res, "BIC"=rr$BIC, "x"=dd))
+	}
+	res[1, ] <- rr2$parameters$mean
+	res[2, ] <- rr2$parameters$variance$sigmasq
+	res[3, ] <- rr2$parameters$pro
+
+	#classification
+	mystatus[cc.ix] <- as.numeric(rr2$classification == 2)
+	mystatus.proba[cc.ix] <- rr2$z[ , 2, drop=TRUE]
+
+	return(list("status"=mystatus, "status1.proba"=mystatus.proba, "gaussians"=res, "BIC"=rr$BIC,  "x"=dd))
+}
