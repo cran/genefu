@@ -10,7 +10,7 @@ function(module.ESR1, module.ERBB2, module.AURKA, data, annot, do.mapping=FALSE,
 	sig.erbb2 <- sig.score(x=module.ERBB2, data=data, annot=annot, do.mapping=do.mapping, mapping=mapping, verbose=FALSE)
 	sig.aurka <- sig.score(x=module.AURKA, data=data, annot=annot, do.mapping=do.mapping, mapping=mapping, verbose=FALSE)
 	dd <- cbind("ESR1"=sig.esr1$score, "ERBB2"=sig.erbb2$score, "AURKA"=sig.aurka$score)
-	m.mod <- list("ESR1"=cbind("probe"=as.character(sig.esr1$probe[ ,"new.probe"]), module.ESR1[match(sig.esr1$probe[ ,"probe"], module.ESR1[ ,"probe"]), c("EntrezGene.ID", "coefficient")]), "ERBB2"=cbind("probe"=as.character(sig.erbb2$probe[ ,"new.probe"]), module.ERBB2[match(sig.erbb2$probe[ ,"probe"], module.ERBB2[ ,"probe"]), c("EntrezGene.ID", "coefficient")]), "AURKA"=cbind("probe"=as.character(sig.aurka$probe[ ,"new.probe"]), module.AURKA[match(sig.aurka$probe[ ,"probe"], module.AURKA[ ,"probe"]), c("EntrezGene.ID", "coefficient")]))
+	m.mod <- list("ESR1"=cbind("probe"=as.character(sig.esr1$probe[ ,"new.probe"]), "EntrezGene.ID"=as.character(sig.esr1$probe[ ,"EntrezGene.ID"]), "coefficient"=module.ESR1[match(sig.esr1$probe[ ,"probe"], module.ESR1[ ,"probe"]), "coefficient"]), "ERBB2"=cbind("probe"=as.character(sig.erbb2$probe[ ,"new.probe"]), "EntrezGene.ID"=as.character(sig.erbb2$probe[ ,"EntrezGene.ID"]), "coefficient"=module.ERBB2[match(sig.erbb2$probe[ ,"probe"], module.ERBB2[ ,"probe"]), "coefficient"]), "AURKA"=cbind("probe"=as.character(sig.aurka$probe[ ,"new.probe"]), "EntrezGene.ID"=as.character(sig.aurka$probe[ ,"EntrezGene.ID"]), "coefficient"=module.AURKA[match(sig.aurka$probe[ ,"probe"], module.AURKA[ ,"probe"]), "coefficient"]))
 	if(do.scale) {
 		## the rescaling needs a large sample size!!!
 		## necessary if we want to validate the classifier using a different dataset
@@ -115,6 +115,7 @@ function(module.ESR1, module.ERBB2, module.AURKA, data, annot, do.mapping=FALSE,
 		#save model parameters in a csv file for reuse
 		write(x=sprintf("# Benjamin Haibe-Kains. All rights reserved."), file=paste(filen, "csv", sep="."))
 		mymean <- t(mclust.tr$parameters$mean)
+		if(is.null(dimnames(mymean)[[1]])) { dimnames(mymean)[[1]] <- 1:nrow(mymean) }
 		for(i in 1:nrow(mymean)) { write(x=sprintf("# mean.%s: %g %g", dimnames(mymean)[[1]][i], mymean[i,1], mymean[i,2]), append=TRUE, file=paste(filen, "csv", sep=".")) }
 		mysigma <- diag(mysigma <- mclust.tr$parameters$variance$sigma[ , ,1])
 		write(x=sprintf("# sigma: %g %g", mysigma[1], mysigma[2]), append=TRUE, file=paste(filen, "csv", sep="."))

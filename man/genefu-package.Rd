@@ -12,8 +12,8 @@ Various functions relevant for gene expression analysis with emphasis on breast 
 \tabular{ll}{
 Package: \tab genefu\cr
 Type: \tab Package\cr
-Version: \tab 1.0.0\cr
-Date: \tab 2009-12-30\cr
+Version: \tab 1.0.1\cr
+Date: \tab 2010-01-13\cr
 License: \tab GPL-3\cr
 }
 }
@@ -22,15 +22,29 @@ License: \tab GPL-3\cr
 Benjamin Haibe-Kains
 
 - Computational Biology and Functional Genomics, Dana-Farber Cancer Institute, Boston, MA, USA
+
 \url{http://compbio.dfci.harvard.edu/}
+
 - Center for Cancer Computational Biology, Dana-Farber Cancer Institute, Boston, MA, USA
+
 \url{http://cccb.dfci.harvard.edu/index.html}
 
 Former labs:
-- Machine Learning Group (MLG), Universite Libre de Bruxelles, Bruxelles, Belgium \url{http://www.ulb.ac.be/di/mlg/}
-- Functional Genomics Unit (FGU), Institut Jules Bordet, Bruxelles, Belgium \url{http://www.bordet.be/en/services/medical/array/practical.htm}
 
-Maintainer: Benjamin Haibe-Kains <\email{bhaibeka@ulb.ac.be}>
+- Machine Learning Group (MLG), Universite Libre de Bruxelles, Bruxelles, Belgium 
+
+\url{http://www.ulb.ac.be/di/mlg/}
+
+- Functional Genomics Unit (FGU), Institut Jules Bordet, Bruxelles, Belgium 
+
+\url{http://www.bordet.be/en/services/medical/array/practical.htm}
+
+
+\bold{Maintainer}: Benjamin Haibe-Kains
+
+\email{bhaibeka@jimmy.harvard.edu}
+
+\email{bhaibeka@ulb.ac.be}
 }
 %\references{}
 \keyword{ clustering }
