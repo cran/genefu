@@ -8,7 +8,7 @@ Function to compute the Relapse Score as published by Wang et al. 2005
 This function computes signature scores and risk classifications from gene expression values following the algorithm used for the Relapse Score (GENE76) as published by Wang et al. 2005.
 }
 \usage{
-gene76(data, er, logged2 = TRUE)
+gene76(data, er)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -17,9 +17,6 @@ Matrix of gene expressions with samples in rows and probes in columns, dimnames 
 }
   \item{er}{
 Vector containing the estrogen receptor (ER) status of breast cancer patients in the dataset.
-}
-  \item{logged2}{
-\code{FALSE} if gene expressions must be transformed in log2, \code{TRUE} otherwise.
 }
 }
 %%\details{

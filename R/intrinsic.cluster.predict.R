@@ -1,9 +1,8 @@
 `intrinsic.cluster.predict` <-
-function(sbt.model, data, annot, do.mapping=FALSE, mapping, do.prediction.strength=FALSE, logged2=TRUE, verbose=FALSE) {
+function(sbt.model, data, annot, do.mapping=FALSE, mapping, do.prediction.strength=FALSE, verbose=FALSE) {
 
 	if(missing(data) || missing(annot) || missing(sbt.model)) { stop("data, annot and sbt.mod parameters must be specified") }
 	if (!is.matrix(data)) { data <- as.matrix(data) }
-	if(!logged2) { data <- log2(data) }
 
 	if(is.list(sbt.model)) {
 		## retrieve model
@@ -219,5 +218,5 @@ function(sbt.model, data, annot, do.mapping=FALSE, mapping, do.prediction.streng
 	}
 	
 	
-	return(list("subtype"=ncln, "subtype.proba"=nproba, "cor"=ncor, "prediction.strength"=ps.res, "subtype.train"=ncl2, "centroids.map"=centroids.map, "profiles"=data))
+	return(list("subtype"=ncln, "subtype.proba"=nproba, "cor"=ncor, "prediction.strength"=ps.res, "subtype.train"=ncl2, "profiles"=data, "centroids.map"=centroids.map))
 }

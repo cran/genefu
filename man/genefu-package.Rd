@@ -12,8 +12,8 @@ Various functions relevant for gene expression analysis with emphasis on breast 
 \tabular{ll}{
 Package: \tab genefu\cr
 Type: \tab Package\cr
-Version: \tab 1.0.8\cr
-Date: \tab 2010-07-11\cr
+Version: \tab 1.0.9\cr
+Date: \tab 2010-08-12\cr
 License: \tab GPL-3\cr
 }
 }

@@ -28,9 +28,9 @@ List of parameters for PAM50:
 \details{ 
 Three versions of the model are provided, each of ones differs by the gene expressions standardization method since it has an important impact on the subtype classification:
 \describe{
-\item{\code{pam50} }{Gene expression centroids for each subtype.}
-\item{\code{pam50.scale} }{Mapping for centroids.}
-\item{\code{pam50.robust} }{Method of correlation used to compute distance to the centroids.}
+\item{\code{pam50} }{Use of the official centroids without scaling of the gene expressions.}
+\item{\code{pam50.scale} }{Use of the official centroids with traditional scaling of the gene expressions (see \code{\link[base]{scale}}).}
+\item{\code{pam50.robust} }{Use of the official centroids with robust scaling of the gene expressions (see \code{\link[genefu]{rescale}}).}
 }
 The model \code{pam50.robust} has been shown to reach the best concordance with the traditional clinical parameters (ER IHC, HER2 IHC/FISH and histological grade). However the use of this model is recommended only when the dataset is representative of a global population of breast cancer patients (no sampling bias, the 5 subtypes should be present).
 }

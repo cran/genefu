@@ -1,5 +1,5 @@
 `intrinsic.cluster` <-
-function(data, annot, do.mapping=FALSE, mapping, std=c("scale", "robust", "none"), intrinsicg, number.cluster=3, mins=5, method.cor=c("spearman", "pearson"), method.centroids=c("mean", "median", "tukey"), logged2=TRUE, filen, verbose=FALSE) {
+function(data, annot, do.mapping=FALSE, mapping, std=c("none", "scale", "robust"), intrinsicg, number.cluster=3, mins=5, method.cor=c("spearman", "pearson"), method.centroids=c("mean", "median", "tukey"), filen, verbose=FALSE) {
 	
 	require(amap)
 	if(missing(data) || missing(annot) || missing(intrinsicg)) { stop("data, annot, and intrinsicg parameters must be specified") }
@@ -8,7 +8,6 @@ function(data, annot, do.mapping=FALSE, mapping, std=c("scale", "robust", "none"
 	method.centroids <- match.arg(method.centroids)
 	#if(method.centroids == "tukey") { require(dplR) }
 	if (!is.matrix(data)) { data <- as.matrix(data) }
-	if(!logged2) { data <- log2(data) }
 	
 	## mapping
 	if(do.mapping) {

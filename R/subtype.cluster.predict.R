@@ -44,7 +44,13 @@ function(sbt.model, data, annot, do.mapping=FALSE, mapping, do.scale=TRUE, do.pr
 	names(sbt) <- dimnames(data)[[1]]
 	sbt.proba <- matrix(NA, nrow(data), ncol=3, dimnames=list(dimnames(data)[[1]], sbtn))
 	
-	dd <- cbind("ESR1"=sig.score(x=m.mod$ESR1, data=data, annot=annot, do.mapping=do.mapping, mapping=mapping, verbose=FALSE)$score, "ERBB2"=sig.score(x=m.mod$ERBB2, data=data, annot=annot, do.mapping=do.mapping, mapping=mapping, verbose=FALSE)$score, "AURKA"=sig.score(x=m.mod$AURKA, data=data, annot=annot, do.mapping=do.mapping, mapping=mapping, verbose=FALSE)$score)
+	sigs.esr1 <- sig.score(x=m.mod$ESR1, data=data, annot=annot, do.mapping=do.mapping, mapping=mapping, verbose=FALSE)
+	sigs.erbb2 <- sig.score(x=m.mod$ERBB2, data=data, annot=annot, do.mapping=do.mapping, mapping=mapping, verbose=FALSE)
+	sigs.aurka <- sig.score(x=m.mod$AURKA, data=data, annot=annot, do.mapping=do.mapping, mapping=mapping, verbose=FALSE)
+	## signature scores
+	dd <- cbind("ESR1"=sigs.esr1$score, "ERBB2"=sigs.erbb2$score, "AURKA"=sigs.aurka$score)
+	## mapping
+	mymap <- list("ESR1"=sigs.esr1$probe, "ERBB2"=sigs.erbb2$probe, "AURLA"=sigs.aurka$probe)
 	cln <- dimnames(subtype.c$parameters$mean)[[2]] <- as.character(1:ncol(subtype.c$parameters$mean))
 	
 	if(do.scale) {
@@ -174,5 +180,5 @@ function(sbt.model, data, annot, do.mapping=FALSE, mapping, do.scale=TRUE, do.pr
 		smartlegend(x="left", y="top", col=c("darkred", "darkgreen", "darkorange", "darkviolet"), legend=sbtn2, pch=c(17, 0, 10, 10), bg="white")
 	}
 
-	return(list("subtype"=sbt, "subtype.proba"=sbt.proba, "prediction.strength"=ps.res, "BIC"=BIC.res, "subtype2"=sbt2, "prediction.strength2"=ps.res2, "module.scores"=dd2))
+	return(list("subtype"=sbt, "subtype.proba"=sbt.proba, "prediction.strength"=ps.res, "BIC"=BIC.res, "subtype2"=sbt2, "prediction.strength2"=ps.res2, "module.scores"=dd2, "mapping"=mymap))
 }

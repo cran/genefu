@@ -8,7 +8,7 @@ Function to fit a Single Sample Predictor (SSP) as in Perou, Sorlie, Hu, and Par
 This function fits the Single Sample Predictor (SSP) as published in Sorlie et al 2003, Hu et al 2006 and Parker et al 2009. This model is actually a nearest centroid classifier where the centroids representing the breast cancer molecular subtypes are identified through hierarchical clustering using an "intrinsic gene list".
 }
 \usage{
-intrinsic.cluster(data, annot, do.mapping = FALSE, mapping, std = c("scale", "robust", "none"), intrinsicg, number.cluster = 3, mins = 5, method.cor = c("spearman", "pearson"), method.centroids = c("mean", "median", "tukey"), logged2 = TRUE, filen, verbose = FALSE)
+intrinsic.cluster(data, annot, do.mapping = FALSE, mapping, std = c("none", "scale", "robust"), intrinsicg, number.cluster = 3, mins = 5, method.cor = c("spearman", "pearson"), method.centroids = c("mean", "median", "tukey"), filen, verbose = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -41,9 +41,6 @@ Correlation coefficient used to identified the nearest centroid. May be \code{sp
 }
   \item{method.centroids}{
 LMethod to compute a centroid from gene expressions of a cluster of samples: \code{mean}, \code{median} or \code{tukey} (Tukey's Biweight Robust Mean).
-}
-  \item{logged2}{
-\code{FALSE} if gene expressions must be transformed in log2, \code{TRUE} otherwise.
 }
   \item{filen}{
 Name of the csv file where the subtype clustering model must be stored.

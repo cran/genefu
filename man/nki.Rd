@@ -20,7 +20,7 @@ This dataset contains (part of) the gene expression, annotations and clinical da
 }
 }
 \details{
-This dataset represent only partially the one published by van  de Vijver et al. in 2008. Indeed, only part of the patients (150) and gene expressions (914) are contained in \code{\link[genefu]{data.nki}}.
+This dataset represent only partially the one published by van  de Vijver et al. in 2008. Indeed, only part of the patients (150) and gene expressions (922) are contained in \code{\link[genefu]{data.nki}}.
 }
 \source{
 \url{http://www.rii.com/publications/2002/vantveer.html}

@@ -1,8 +1,6 @@
 `gene76` <-
-function(data, er, logged2=TRUE) {
-
-	if(!logged2) { data <- log2(data) }
-
+function(data, er) {
+	
 	A <- 313.5
 	B <- 280
 	

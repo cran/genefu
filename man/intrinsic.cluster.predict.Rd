@@ -8,7 +8,7 @@ Function to identify breast cancer molecular subtypes using the Single Sample Pr
 This function identifies the breast cancer molecular subtypes using a Single Sample Predictor (SSP) fitted by \code{\link[genefu]{intrinsic.cluster}}.
 }
 \usage{
-intrinsic.cluster.predict(sbt.model, data, annot, do.mapping = FALSE, mapping, do.prediction.strength = FALSE, logged2 = TRUE, verbose = FALSE)
+intrinsic.cluster.predict(sbt.model, data, annot, do.mapping = FALSE, mapping, do.prediction.strength = FALSE, verbose = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -29,9 +29,6 @@ Matrix with columns "EntrezGene.ID" and "probe" used to force the mapping such t
 }
   \item{do.prediction.strength}{
 \code{TRUE} if the prediction strength must be computed (Tibshirani and Walther 2005), \code{FALSE} otherwise.
-}
-  \item{logged2}{
-\code{FALSE} if gene expressions must be transformed in log2, \code{TRUE} otherwise.
 }
   \item{verbose}{
 \code{TRUE} to print informative messages, \code{FALSE} otherwise.
@@ -78,7 +75,7 @@ data(ssp2003)
 ## load NKI data
 data(nki)
 ## SSP2003 applied on NKI
-ssp2003.nki <- intrinsic.cluster.predict(sbt.model=ssp2003, data=data.nki, annot=annot.nki, do.mapping=TRUE, do.prediction.strength=FALSE, logged=TRUE, verbose=TRUE)
+ssp2003.nki <- intrinsic.cluster.predict(sbt.model=ssp2003, data=data.nki, annot=annot.nki, do.mapping=TRUE, do.prediction.strength=FALSE, verbose=TRUE)
 table(ssp2003.nki$subtype)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

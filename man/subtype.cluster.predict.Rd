@@ -54,6 +54,7 @@ Matrix with columns "EntrezGene.ID" and "probe" used to force the mapping such t
   \item{subtype2 }{Subtypes identified by the Subtype Clustering Model using AURKA to discriminate low and high proliferative tumors. Subtypes can be either "ER-/HER2-", "HER2+", "ER+/HER2- High Prolif" or "ER+/HER2- Low Prolif".}
   \item{prediction.strength2 }{Prediction strength for \code{subtypes2}.}
   \item{module.scores }{Matrix containing ESR1, ERBB2 and AURKA module scores.}
+  \item{mapping }{Mapping if necessary (list of matrices with 3 columns: probe, EntrezGene.ID and new.probe).}
 }
 \references{
 Desmedt C, Haibe-Kains B, Wirapati P, Buyse M, Larsimont D, Bontempi G, Delorenzi M, Piccart M, and Sotiriou C (2008) "Biological processes associated with breast cancer clinical outcome depend on the molecular subtypes", \emph{Clinical Cancer Research}, \bold{14}(16):5158--5165.
