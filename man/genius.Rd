@@ -40,7 +40,7 @@ Matrix with columns "EntrezGene.ID" and "probe" used to force the mapping such t
   \item{score }{Overall risk prediction as computed by the GENIUS model.}
 }
 \references{
-Haibe-Kains B, Desmedt C, Rothe F, Piccart M, Bontempi G and Sotiriou C (2010) "A fuzzy gene expression-based computational approach improves breast cancer prognostication", \emph{Genome Biology}, accepted for publication.
+Haibe-Kains B, Desmedt C, Rothe F, Sotiriou C and Bontempi G (2010) "A fuzzy gene expression-based computational approach improves breast cancer prognostication", \emph{Genome Biology}, \bold{11}(2):R18
 }
 \author{
 Benjamin Haibe-Kains

@@ -117,7 +117,13 @@ function(sbt.model, data, annot, do.mapping=FALSE, mapping, do.prediction.streng
 	ncl <- apply(X=ncor, MARGIN=1, FUN=function(x) { return(order(x, decreasing=TRUE)[1]) })
 	names(ncl) <- dimnames(data)[[1]]
 	
-	ps.res <- NULL
+	## if one or more subtypes have not been identified, remove them for prediction strength
+	myx <- sort(unique(ncl))
+	myx <- myx[!is.na(myx)]
+	name.cluster <- name.cluster[myx]
+	number.cluster <- length(myx)
+	
+	ps.res <- ncl2 <- NULL
 	if(do.prediction.strength) {
 		## compute the clustering and cut the dendrogram
 		## hierarchical clustering with correlation-based distance and average linkage
@@ -191,5 +197,5 @@ function(sbt.model, data, annot, do.mapping=FALSE, mapping, do.prediction.streng
 	ncl <- name.cluster[ncl]
 	names(ncl) <- dimnames(data)[[1]]
 	
-	return(list("subtype"=ncl, "subtype.proba"=nproba, "cor"=ncor, "prediction.strength"=ps.res, "centroids.map"=centroids.map, "profiles"=data))
+	return(list("subtype"=ncl, "subtype.proba"=nproba, "cor"=ncor, "prediction.strength"=ps.res, "subtype.train"=ncl2, "centroids.map"=centroids.map, "profiles"=data))
 }

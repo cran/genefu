@@ -5,7 +5,7 @@
 Function to rescale values based on quantiles
 }
 \description{
-This function rescales values \code{x} based on quantiles specified by the user such that \code{x' = (x - q1) / (q2 - q1)} where q is the specified quantile, \code{q1 = q / 2}, \code{q2 = 1 - q/2)} and \code{x'} are the new rescaled values.
+This function rescales values \code{x} based on quantiles specified by the user such that x' = (x - q1) / (q2 - q1) where q is the specified quantile, q1 = q / 2, q2 = 1 - q/2) and x' are the new rescaled values.
 }
 \usage{
 rescale(x, na.rm = FALSE, q = 0)

@@ -14,7 +14,7 @@ function(data, annot, do.mapping=FALSE, mapping, hg, verbose=FALSE) {
 	}
 	###########
 	ggi.gl <- cbind(sig.ggi[ ,c("probe", "EntrezGene.ID")], "coefficient"=ifelse(sig.ggi[ ,"grade"] == 1, -1, 1))
-	res <- sig.score(x=ggi.gl, data=data, annot=annot, do.mapping=TRUE, signed=TRUE, verbose=verbose)$score
+	res <- sig.score(x=ggi.gl, data=data, annot=annot, do.mapping=do.mapping, mapping=mapping, signed=TRUE, verbose=verbose)$score
 		
 	if(!missing(hg)) {
 		if(length(hg) != nrow(data)) { stop("hg must have the same length nrow(data)!") }
@@ -23,8 +23,11 @@ function(data, annot, do.mapping=FALSE, mapping, hg, verbose=FALSE) {
 		mm <- mhg1 + (mhg3 -  mhg1) / 2
 		res.scaled <- ((res - mm) / (mhg3 - mhg1)) * 2
 		res <- list("score"=res.scaled, "risk"=ifelse(res.scaled >= 0, 1, 0))	
+	} else {
+		riskt <- rep(NA, length(res))
+		names(riskt) <- names(res)
+		res <- list("score"=res, "risk"=riskt)
 	}
-	else { res <- list("score"=res, "risk"=NA) }
 	
 	return (res)
 }

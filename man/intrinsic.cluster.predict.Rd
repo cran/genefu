@@ -47,6 +47,7 @@ Matrix with columns "EntrezGene.ID" and "probe" used to force the mapping such t
 \item{subtype.proba }{Probabilities  to belong to each subtype estimated from the correlations to each centroid.}
 \item{cor }{Correlation coefficient to each centroid.}
 \item{prediction.strength }{Prediction strength for \code{subtypes}.}
+\item{subtype.train }{Classification (similar to \code{subtypes}) computed during fitting of the model for prediction strength.}
 \item{centroids.map }{Mapped probes from the intrinsic gene list used to compute the centroids.}
 \item{profiles }{Intrinsic gene expression profiles for each sample.}
 }
@@ -78,7 +79,7 @@ data(ssp2003)
 data(nki)
 ## SSP2003 applied on NKI
 ssp2003.nki <- intrinsic.cluster.predict(sbt.model=ssp2003, data=data.nki, annot=annot.nki, do.mapping=TRUE, do.prediction.strength=FALSE, logged=TRUE, verbose=TRUE)
-table(ssp2003.nki$sintype)
+table(ssp2003.nki$subtype)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

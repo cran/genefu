@@ -12,12 +12,8 @@ read.m.file(file, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{file}{
-Filename of the 'csv' file.
-}
-  \item{\dots}{
-Additional parameters for \code{\link[utils]{read.csv}} function.
-}
+  \item{file}{ Filename of the 'csv' file. }
+  \item{\dots}{ Additional parameters for \code{\link[utils]{read.csv}} function. }
 }
 %%\details{
 %%  ~~ If necessary, more details than the description above ~~
@@ -39,11 +35,11 @@ Benjamin Haibe-Kains
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link[genefu]{mod1}}, \code{\link[genefu]{mod2}}, 'extdata/desmedt2009_genemodules.csv', 'extdata/haibekains2009_sig_genius.csv'
+\code{\link[genefu]{mod1}}, \code{\link[genefu]{mod2}}, 'extdata/desmedt2008_genemodules.csv', 'extdata/haibekains2009_sig_genius.csv'
 }
 \examples{
 ## read the seven gene modules as published in Desmedt et al 2008
-genemods <- read.m.file(system.file("extdata/desmedt2009_genemodules.csv", package = "genefu"))
+genemods <- read.m.file(system.file("extdata/desmedt2008_genemodules.csv", package = "genefu"))
 str(genemods, max.level=1)
 ## read the three subtype signtaures from GENIUS
 geniusm <- read.m.file(system.file("extdata/haibekains2009_sig_genius.csv", package = "genefu"))
