@@ -6,7 +6,7 @@ function(data, logged2=TRUE, verbose=FALSE) {
 	gt <- nrow(sig.gene70)
 	data <- data[ ,intersect(dimnames(sig.gene70)[[1]], dimnames(data)[[2]])]
 	genes70 <- sig.gene70[dimnames(data)[[2]], ]
-	gm <- nrow(sig.gene70)
+	gm <- nrow(genes70)
 
 	if(verbose && gm != gt) { warning(sprintf("%i/%i probes are used to compute the score", gm, gt)) }
 

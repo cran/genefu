@@ -31,6 +31,6 @@ function(data, annot, do.mapping=FALSE, mapping, do.scale=TRUE) {
 	combine.pred <- apply(ww * cc, 1, sum)
 
 	pred.sbtclassif <- c(pred.sbtclassif, list(combine.pred))
-	names(pred.sbtclassif)[length(pred.sbtclassif)] <- "combined.score"
+	names(pred.sbtclassif)[length(pred.sbtclassif)] <- "score"
 	return(pred.sbtclassif)
 }

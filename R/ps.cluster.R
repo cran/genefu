@@ -1,6 +1,6 @@
 `ps.cluster` <-
 function(cl.tr, cl.ts, na.rm=FALSE) {
-	if(length(cl.tr) != length(cl.ts)) { stop("the two clustering should have the same length!") }
+	if(length(cl.tr) != length(cl.ts)) { stop("the two clustering must have the same length!") }
 	if(is.null(names(cl.tr))) { names(cl.tr) <- names(cl.ts) <- paste("X", 1:length(cl.tr), sep=".") }
 	cc.ix <- complete.cases(cl.tr, cl.ts)
 	if(any(!cc.ix) & !na.rm) { stop("missing values are present!") }

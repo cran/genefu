@@ -60,9 +60,10 @@ function(data, annot, do.mapping=FALSE, mapping, std=c("scale", "robust", "none"
 		intrinsicg <- intersect(intrinsicg, dimnames(data)[[2]])
 		data <- data[ ,intrinsicg]
 	}
+	gm <- length(intrinsicg)
+	if(gm == 0 || (sum(is.na(data)) / length(data)) > 0.9) { stop("none of the instrinsic genes are present or too many missing values!") }
 	if(!is.null(names(intrinsicg))) { centroids.map <- cbind("probe"=dimnames(data)[[2]], "probe.centroids"=names(intrinsicg), "EntrezGene.ID"=as.character(annot[dimnames(data)[[2]], "EntrezGene.ID"])) } else { centroids.map <- cbind("probe"=dimnames(data)[[2]], "probe.centroids"=NA, "EntrezGene.ID"=as.character(annot[dimnames(data)[[2]], "EntrezGene.ID"])) }
 	dimnames(centroids.map)[[1]] <- dimnames(data)[[2]]
-	gm <- length(intrinsicg)
 	
 	if(verbose) { cat(sprintf("%i/%i probes are used for clustering\n", gm, gt)) }
 

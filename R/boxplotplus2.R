@@ -8,7 +8,7 @@ function(x, .jit = 0.25, .las = 1, .ylim, box.col = "lightgrey", pt.col = "blue"
 		if(missing(.ylim)) { myrange <- range(y) } else { myrange <- .ylim }
 	} else { if(missing(.ylim)) { myrange <- range(unlist(x)) } else { myrange <- .ylim } }
 
-    bp <- boxplot(y, las = .las, cex.axis = 0.85, border="grey", col=box.col, boxwex=0.5, ylim=myrange, ...)
+    bp <- boxplot(y, las = .las, cex.axis = 0.85, border="grey", col=box.col, boxwex=0.5, ylim=myrange, range=0, ...)
     if (isMAT) {
         xp <- rep(1:nrow(x), times=ncol(x))
         yp <- as.vector(x)

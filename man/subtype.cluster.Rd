@@ -59,6 +59,7 @@ Name of the csv file where the subtype clustering model must be stored.
   \item{subtype }{Subtypes identified by the Subtype Clustering Model. Subtypes can be either "ER-/HER2-", "HER2+" or "ER+/HER2-".}
   \item{subtype.proba }{Probabilities  to belong to each subtype estimated by the Subtype Clustering Model.}
   \item{subtype2 }{Subtypes identified by the Subtype Clustering Model using AURKA to discriminate low and high proliferative tumors. Subtypes can be either "ER-/HER2-", "HER2+", "ER+/HER2- High Prolif" or "ER+/HER2- Low Prolif".}
+  \item{module.scores }{Matrix containing ESR1, ERBB2 and AURKA module scores.}
 }
 \references{
 Desmedt C, Haibe-Kains B, Wirapati P, Buyse M, Larsimont D, Bontempi G, Delorenzi M, Piccart M, and Sotiriou C (2008) "Biological processes associated with breast cancer clinical outcome depend on the molecular subtypes", \emph{Clinical Cancer Research}, \bold{14}(16):5158--5165.

@@ -40,19 +40,38 @@ function(sbt.model, data, annot, do.mapping=FALSE, mapping, do.scale=TRUE, do.pr
 		cc <- m.param$cutoff.AURKA
 	}
 	
+	sbt <- rep(NA, nrow(data))
+	names(sbt) <- dimnames(data)[[1]]
+	sbt.proba <- matrix(NA, nrow(data), ncol=3, dimnames=list(dimnames(data)[[1]], sbtn))
+	
 	dd <- cbind("ESR1"=sig.score(x=m.mod$ESR1, data=data, annot=annot, do.mapping=do.mapping, mapping=mapping, verbose=FALSE)$score, "ERBB2"=sig.score(x=m.mod$ERBB2, data=data, annot=annot, do.mapping=do.mapping, mapping=mapping, verbose=FALSE)$score, "AURKA"=sig.score(x=m.mod$AURKA, data=data, annot=annot, do.mapping=do.mapping, mapping=mapping, verbose=FALSE)$score)
 	cln <- dimnames(subtype.c$parameters$mean)[[2]] <- as.character(1:ncol(subtype.c$parameters$mean))
 	
 	if(do.scale) {
-		#the rescaling needs a large sample size!!!
-		#necessary if we want to validate the classifier using a different dataset
-		#the estimation of survival probabilities depends on the scale of the score
-		#dd <- apply(dd, 2, iqr.scale)
+		## the rescaling needs a large sample size!!!
+		## necessary if we want to validate the classifier using a different dataset
+		## the estimation of survival probabilities depends on the scale of the score
 		dd <- apply(dd, 2, function(x) { return((rescale(x, q=0.05, na.rm=TRUE) - 0.5) * 2) })
 	}
 	dd2 <- dd
 	
 	cc.ix <- complete.cases(dd[ , c("ESR1", "ERBB2"), drop=FALSE])
+	if(all(!cc.ix)) {
+		ps.res <- ps.res2 <- BIC.res <- NULL
+		if(do.prediction.strength) {
+			tt <- rep(NA, length(sbtn))
+			names(tt) <- sbtn
+			tt2 <- rep(NA, length(sbtn2))
+			names(tt2) <- sbtn2
+			ps.res <- list("ps"=NA, "ps.cluster"=tt, "ps.individual"=sbt)
+			ps.res2 <- list("ps"=NA, "ps.cluster"=tt2, "ps.individual"=sbt)
+		}
+		if(do.BIC) {
+			BIC.res <- rep(NA, 10)
+			names(BIC.res) <- 1:10
+		}
+		return(list("subtype"=sbt, "subtype.proba"=sbt.proba, "prediction.strength"=ps.res, "BIC"=BIC.res, "subtype2"=sbt, "prediction.strength2"=ps.res2))
+	}
 	dd <- dd[cc.ix, , drop=FALSE]
 	
 	emclust.ts <- estep(modelName="EEI", data=dd[ , c("ESR1", "ERBB2"), drop=FALSE], parameters=subtype.c$parameters)
@@ -73,8 +92,8 @@ function(sbt.model, data, annot, do.mapping=FALSE, mapping, do.scale=TRUE, do.pr
 			warning("less than 3 subtypes are identified!")
 			tt <- rep(NA, length(sbtn))
 			names(tt) <- sbtn
-			tt2 <- rep(NA, length(class.ts))
-			names(tt2) <- names(class.ts)
+			tt2 <- rep(NA, nrow(dd2))
+			names(tt2) <- dimnames(dd2)[[1]]
 			ps.res <- list("ps"=0, "ps.cluster"=tt, "ps.individual"=tt2)
 			tt <- rep(NA, length(sbtn2))
 			names(tt) <- sbtn2
@@ -107,6 +126,11 @@ function(sbt.model, data, annot, do.mapping=FALSE, mapping, do.scale=TRUE, do.pr
 			#prediction strength
 			ps.res <- ps.cluster(cl.tr=class.ts, cl.ts=class.tr, na.rm=TRUE)
 			names(ps.res$ps.cluster) <- sbtn
+			## check for missing values in ps.individual
+			tt2 <- rep(NA, nrow(dd2))
+			names(tt2) <- dimnames(dd2)[[1]]
+			tt2[names(ps.res$ps.individual)] <- ps.res$ps.individual
+			ps.res$ps.individual <- tt2
 			#prediction strength with the separation in high and low proliferative tumors
 			class.ts2 <- class.ts
 			class.ts2[class.ts == 3 & dd2[dimnames(dd)[[1]], "AURKA"] < cc & complete.cases(class.ts, dd2[dimnames(dd)[[1]], "AURKA"])] <- 4
@@ -114,6 +138,11 @@ function(sbt.model, data, annot, do.mapping=FALSE, mapping, do.scale=TRUE, do.pr
 			class.tr2[class.tr == 3 & dd2[dimnames(dd)[[1]], "AURKA"] < cc & complete.cases(class.tr, dd2[dimnames(dd)[[1]], "AURKA"])] <- 4
 			ps.res2 <- ps.cluster(cl.tr=class.ts2, cl.ts=class.tr2, na.rm=TRUE)
 			names(ps.res2$ps.cluster) <- sbtn2
+			## check for missing values in ps.individual
+			tt2 <- rep(NA, nrow(dd2))
+			names(tt2) <- dimnames(dd2)[[1]]
+			tt2[names(ps.res2$ps.individual)] <- ps.res2$ps.individual
+			ps.res2$ps.individual <- tt2
 		}
 	}
 	
@@ -121,10 +150,7 @@ function(sbt.model, data, annot, do.mapping=FALSE, mapping, do.scale=TRUE, do.pr
 	if(do.BIC) { BIC.res <- mclustBIC(data=dd[ , c("ESR1", "ERBB2"), drop=FALSE], modelNames=c("EEI"), G=1:10)[ ,"EEI"] }
 
 	## subtypes
-	sbt <- rep(NA, nrow(data))
-	names(sbt) <- dimnames(data)[[1]]
 	sbt[names(class.ts)] <- sbtn[class.ts]
-	sbt.proba <- matrix(NA, nrow(data), ncol=ncol(emclust.ts$z), dimnames=list(dimnames(data)[[1]], sbtn))
 	sbt.proba[dimnames(emclust.ts$z)[[1]], ] <- emclust.ts$z
 	## discriminate between luminal A and B using AURKA
 	sbt2 <- sbt
@@ -148,5 +174,5 @@ function(sbt.model, data, annot, do.mapping=FALSE, mapping, do.scale=TRUE, do.pr
 		smartlegend(x="left", y="top", col=c("darkred", "darkgreen", "darkorange", "darkviolet"), legend=sbtn2, pch=c(17, 0, 10, 10), bg="white")
 	}
 
-	return(list("subtype"=sbt, "subtype.proba"=sbt.proba, "prediction.strength"=ps.res, "BIC"=BIC.res, "subtype2"=sbt2, "prediction.strength2"=ps.res2))
+	return(list("subtype"=sbt, "subtype.proba"=sbt.proba, "prediction.strength"=ps.res, "BIC"=BIC.res, "subtype2"=sbt2, "prediction.strength2"=ps.res2, "module.scores"=dd2))
 }

@@ -2,10 +2,10 @@
 \alias{genius}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Function to compute the Gene Expression progNostic Index Using Subtypes (GENIUS) as published by Haibe-Kains et al. 2009
+Function to compute the Gene Expression progNostic Index Using Subtypes (GENIUS) as published by Haibe-Kains et al. 2010
 }
 \description{
-This function computes the Gene Expression progNostic Index Using Subtypes (GENIUS) as published by Haibe-Kains et al. 2009. Only the signature score is computed, no official cutoff for binary prediction being published.
+This function computes the Gene Expression progNostic Index Using Subtypes (GENIUS) as published by Haibe-Kains et al. 2010. Subtype-specific risk scores are computed for each subtype signature separately and an overall risk score is computed by combining these scores with the posterior probability to belong to each of the breast cancer molecular subtypes.
 }
 \usage{
 genius(data, annot, do.mapping = FALSE, mapping, do.scale = TRUE)
@@ -37,10 +37,10 @@ Matrix with columns "EntrezGene.ID" and "probe" used to force the mapping such t
   \item{GENIUSM1 }{Risk score from the ER-/HER2- subtype signature in GENIUS model.}
   \item{GENIUSM2 }{Risk score from the HER2+ subtype signature in GENIUS model.}
   \item{GENIUSM3 }{Risk score from the ER+/HER2- subtype signature in GENIUS model.}
-  \item{combined.score }{Overall risk prediction as computed by the GENIUS model.}
+  \item{score }{Overall risk prediction as computed by the GENIUS model.}
 }
 \references{
-Haibe-Kains B. et al \emph{In press}
+Haibe-Kains B, Desmedt C, Rothe F, Piccart M, Bontempi G and Sotiriou C (2010) "A fuzzy gene expression-based computational approach improves breast cancer prognostication", \emph{Genome Biology}, accepted for publication.
 }
 \author{
 Benjamin Haibe-Kains

@@ -48,6 +48,7 @@ Matrix with columns "EntrezGene.ID" and "probe" used to force the mapping such t
 \item{cor }{Correlation coefficient to each centroid.}
 \item{prediction.strength }{Prediction strength for \code{subtypes}.}
 \item{centroids.map }{Mapped probes from the intrinsic gene list used to compute the centroids.}
+\item{profiles }{Intrinsic gene expression profiles for each sample.}
 }
 \references{
 T. Sorlie and R. Tibshirani and J. Parker and T. Hastie and J. S. Marron and A. Nobel and S. Deng and H. Johnsen and R. Pesich and S. Geister and J. Demeter and C. Perou and P. E. Lonning and P. O. Brown and A. L. Borresen-Dale and D. Botstein (2003) "Repeated Observation of Breast Tumor Subtypes in Independent Gene Expression Data Sets", \emph{Proceedings of the National Academy of Sciences}, \bold{1}(14):8418--8423

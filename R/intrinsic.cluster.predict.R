@@ -87,7 +87,15 @@ function(sbt.model, data, annot, do.mapping=FALSE, mapping, do.prediction.streng
 	centroids.map <- cbind("probe"=dimnames(data)[[2]], "probe.centroids"=dimnames(centroids)[[1]], "EntrezGene.ID"=as.character(annot[dimnames(data)[[2]], "EntrezGene.ID"]))
 	dimnames(centroids.map)[[1]] <- dimnames(data)[[2]]
 	gm <- nrow(centroids)
-	
+	if(gm == 0 || (sum(is.na(data)) / length(data)) > 0.9) { ## no mapping or too many missing values
+		ncl <- rep(NA, nrow(data))
+		names(ncl) <- dimnames(data)[[1]]
+		nproba <- ncor <- matrix(NA, nrow=nrow(data), ncol=ncol(centroids), dimnames=list(dimnames(data)[[1]], name.cluster))
+		ps.res <- NULL
+		if(do.prediction.strength) { ps.res <- list("ps"=NA, "ps.cluster"=ncor[ , 1], "ps.individual"=ncl)}
+		tt <- matrix(NA, ncol=nrow(centroids.map), nrow=nrow(data), dimnames=list(dimnames(data)[[1]], dimnames(centroids.map)[[1]]))
+		return(list("subtype"=ncl, "subtype.proba"=nproba, "cor"=ncor, "prediction.strength"=ps.res, "centroids.map"=centroids.map, "profiles"=tt))
+	}
 	if(verbose) { cat(sprintf("%i/%i probes are used for clustering\n", gm, gt)) }
 
 	#standardization of the gene expressions
@@ -111,12 +119,13 @@ function(sbt.model, data, annot, do.mapping=FALSE, mapping, do.prediction.streng
 	
 	ps.res <- NULL
 	if(do.prediction.strength) {
-		#compute the clustering and cut the dendrogram
-		#hierarchical clustering with correlation-based distance and average linkage
+		## compute the clustering and cut the dendrogram
+		## hierarchical clustering with correlation-based distance and average linkage
 		hcl <- hcluster(x=data, method="correlation", link="average")
-		mins.ok <- FALSE
+		mins.ok <- stop.ok <- FALSE
 		nbc <- number.cluster
-		while(!mins.ok) { ## until each cluster contains at least mins samples
+		nclust.best <- 1
+		while(!mins.ok && !stop.ok) { ## until each cluster contains at least mins samples
 			cl <- cutree(tree=hcl, k=nbc)
 			tt <- table(cl)
 			if(sum(tt >= mins) >= number.cluster) {
@@ -130,19 +139,39 @@ function(sbt.model, data, annot, do.mapping=FALSE, mapping, do.prediction.streng
 					for(i in 1:number.cluster) { cl2[cl == ucl[i] & !is.na(cl)] <- i }
 					cl <- cl2
 				}
+				nclust.best <- number.cluster
 				mins.ok <- TRUE
 			} else {
+				if(sum(tt >= mins) > nclust.best) {
+					nbc.best <- nbc
+					nclust.best <- sum(tt >= mins)
+				}
 				nbc <- nbc + 1
-				if(nbc > (nrow(data) - (number.cluster * mins))) { stop("clusters are too small (size < mins)!") }
+				if(nbc > (nrow(data) - (number.cluster * mins))) {
+					warning(sprintf("impossible to find %i main clusters wit at least %i individuals!", number.cluster, mins))
+					stop.ok <- TRUE
+				}
+			}
+			if(stop.ok) { ## no convergence for the clustering with mininmum set of individuals
+				cl <- cutree(tree=hcl, k=nbc.best)
+				tt <- table(cl)
+				td <- names(tt)[tt < mins]
+				cl[is.element(cl, td)] <- NA
+				## rename the clusters
+				ucl <- sort(unique(cl))
+				ucl <- ucl[!is.na(ucl)]
+				cl2 <- cl
+				for(i in 1:nclust.best) { cl2[cl == ucl[i] & !is.na(cl)] <- i }
+				cl <- cl2
 			}
 		}
-		#compute the centroids
-		##take the core samples in each cluster to compute the centroid
-		##not feasible due to low intra correlation within clusters!!!
-		##minimal pairwise cor of approx 0.3
+		## compute the centroids
+		## take the core samples in each cluster to compute the centroid
+		## not feasible due to low intra correlation within clusters!!!
+		## minimal pairwise cor of approx 0.3
 		#cl2 <- cutree(tree=hcl, h=0.7)
 		#table(cl, cl2) to detect which core cluster of samples for which cluster.
-		cl.centroids <- matrix(NA, nrow=ncol(data), ncol=number.cluster, dimnames=list(dimnames(data)[[2]], paste("cluster", 1:number.cluster, sep=".")))
+		cl.centroids <- matrix(NA, nrow=ncol(data), ncol=nclust.best, dimnames=list(dimnames(data)[[2]], paste("cluster", 1:nclust.best, sep=".")))
 		for(i in 1:ncol(cl.centroids)) {
 			switch(method.centroids, 
 			"mean"={ cl.centroids[ ,i] <- apply(X=data[cl == i & !is.na(cl), ,drop=FALSE], MARGIN=2, FUN=mean, na.rm=TRUE, trim=0.025) }, 
@@ -162,5 +191,5 @@ function(sbt.model, data, annot, do.mapping=FALSE, mapping, do.prediction.streng
 	ncl <- name.cluster[ncl]
 	names(ncl) <- dimnames(data)[[1]]
 	
-	return(list("subtype"=ncl, "subtype.proba"=nproba, "cor"=ncor, "prediction.strength"=ps.res, "centroids.map"=centroids.map))
+	return(list("subtype"=ncl, "subtype.proba"=nproba, "cor"=ncor, "prediction.strength"=ps.res, "centroids.map"=centroids.map, "profiles"=data))
 }

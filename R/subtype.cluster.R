@@ -21,6 +21,7 @@ function(module.ESR1, module.ERBB2, module.AURKA, data, annot, do.mapping=FALSE,
 	
 	cc.ix <- complete.cases(dd[ , c("ESR1", "ERBB2"), drop=FALSE])
 	dd <- dd[cc.ix, , drop=FALSE]
+	if(all(!cc.ix)) { stop("None of ESR1 and ERBB2 genes are present!") }
 
 	if(do.BIC) {
 		## save the BIC values for the all the methods and a number of clusters from 1 to 10
@@ -131,5 +132,5 @@ function(module.ESR1, module.ERBB2, module.AURKA, data, annot, do.mapping=FALSE,
 		write.m.file(m.mod, file=paste(filen, "csv", sep="."), col.names=FALSE, append=TRUE)
 	}
 	
-	return(list("model"=c(mclust.tr["parameters"], list("cutoff.AURKA"=cc), list("mod"=m.mod)), "BIC"=cluster.bic, "subtype"=sbt, "subtype.proba"=sbt.proba, "subtype2"=sbt2))
+	return(list("model"=c(mclust.tr["parameters"], list("cutoff.AURKA"=cc), list("mod"=m.mod)), "BIC"=cluster.bic, "subtype"=sbt, "subtype.proba"=sbt.proba, "subtype2"=sbt2, "module.scores"=dd2))
 }
