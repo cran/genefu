@@ -12,8 +12,8 @@ Various functions relevant for gene expression analysis with emphasis on breast 
 \tabular{ll}{
 Package: \tab genefu\cr
 Type: \tab Package\cr
-Version: \tab 1.0.5\cr
-Date: \tab 2010-03-30\cr
+Version: \tab 1.0.8\cr
+Date: \tab 2010-07-11\cr
 License: \tab GPL-3\cr
 }
 }
@@ -35,7 +35,7 @@ Former labs:
 
 \url{http://www.ulb.ac.be/di/mlg/}
 
-- Functional Genomics Unit (FGU), Institut Jules Bordet, Bruxelles, Belgium 
+- Breast Cancer Translational Laboratory (BCTL), Institut Jules Bordet, Bruxelles, Belgium 
 
 \url{http://www.bordet.be/en/services/medical/array/practical.htm}
 
@@ -54,4 +54,3 @@ Former labs:
 \seealso{
 \code{survcomp}
 }
-%\examples{}

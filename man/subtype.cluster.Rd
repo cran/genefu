@@ -8,7 +8,7 @@ Function to fit the Subtype Clustering Model
 This function fits the Subtype Clustering Model as published in Desmedt et al. 2008 and Wiarapati et al. 2008. This model is actually a mixture of three Gaussians with equal shape, volume and variance (see \code{EEI} model in \code{\link[mclust]{Mclust}}). This model is adapted to breast cancer and uses ESR1, ERBB2 and AURKA dimensions to identify the molecular subtypes, i.e. ER-/HER2-, HER2+ and ER+/HER2- (Low and High Prolif).
 }
 \usage{
-subtype.cluster(module.ESR1, module.ERBB2, module.AURKA, data, annot, do.mapping = FALSE, mapping, do.scale = TRUE, do.BIC = TRUE, plot = FALSE, filen, verbose = FALSE)
+subtype.cluster(module.ESR1, module.ERBB2, module.AURKA, data, annot, do.mapping = FALSE, mapping, do.scale = TRUE, do.BIC = FALSE, plot = FALSE, filen, verbose = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -54,7 +54,7 @@ Name of the csv file where the subtype clustering model must be stored.
 \value{
 %%  ~Describe the value returned
 %%  If it is a LIST, use
-  \item{model }{Subtype Clustering Model (mixture of three Gaussians), like \code{\link[genefu]{sbtgene}}, \code{\link[genefu]{sbtmod1}} and \code{\link[genefu]{sbtmod2}} when this function is used on VDX dataset (Wang et al. 2005 and Minn et al. 2007) with the gene modules published in the two references cited below.}
+  \item{model }{Subtype Clustering Model (mixture of three Gaussians), like \code{\link[genefu]{scmgene}}, \code{\link[genefu]{scmod1}} and \code{\link[genefu]{scmod2}} when this function is used on VDX dataset (Wang et al. 2005 and Minn et al. 2007) with the gene modules published in the two references cited below.}
   \item{BIC }{Bayesian Information Criterion for the Subtype Clustering Model with number of clusters ranging from 1 to 10.}
   \item{subtype }{Subtypes identified by the Subtype Clustering Model. Subtypes can be either "ER-/HER2-", "HER2+" or "ER+/HER2-".}
   \item{subtype.proba }{Probabilities  to belong to each subtype estimated by the Subtype Clustering Model.}
@@ -75,7 +75,7 @@ Benjamin Haibe-Kains
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link[genefu]{subtype.cluster.predict}}, \code{\link[genefu]{intrinsic.cluster}},  \code{\link[genefu]{intrinsic.cluster.predict}}, \code{\link[genefu]{sbtmod1}}, \code{\link[genefu]{sbtmod2}}
+\code{\link[genefu]{subtype.cluster.predict}}, \code{\link[genefu]{intrinsic.cluster}},  \code{\link[genefu]{intrinsic.cluster.predict}}, \code{\link[genefu]{scmod1}}, \code{\link[genefu]{scmod2}}
 }
 \examples{
 ## example without gene mapping
@@ -84,18 +84,18 @@ data(vdx)
 ## load gene modules
 data(mod1)
 ## fit a Subtype Clustering Model
-sbtmod1.vdx <- subtype.cluster(module.ESR1=mod1$ESR1, module.ERBB2=mod1$ERBB2, module.AURKA=mod1$AURKA, data=data.vdx, annot=annot.vdx, do.mapping=FALSE, do.scale=TRUE, plot=TRUE, verbose=TRUE)
-str(sbtmod1.vdx, max.level=1)
-table(sbtmod1.vdx$subtype2)
+scmod1.vdx <- subtype.cluster(module.ESR1=mod1$ESR1, module.ERBB2=mod1$ERBB2, module.AURKA=mod1$AURKA, data=data.vdx, annot=annot.vdx, do.mapping=FALSE, do.scale=TRUE, plot=TRUE, verbose=TRUE)
+str(scmod1.vdx, max.level=1)
+table(scmod1.vdx$subtype2)
 ## example with gene mapping
 ## load NKI data
 data(nki)
 ## load gene modules
 data(mod1)
 ## fit a Subtype Clustering Model
-sbtmod1.nki <- subtype.cluster(module.ESR1=mod1$ESR1, module.ERBB2=mod1$ERBB2, module.AURKA=mod1$AURKA, data=data.nki, annot=annot.nki, do.mapping=TRUE, do.scale=TRUE, plot=TRUE, verbose=TRUE)
-str(sbtmod1.nki, max.level=1)
-table(sbtmod1.nki$subtype2)
+scmod1.nki <- subtype.cluster(module.ESR1=mod1$ESR1, module.ERBB2=mod1$ERBB2, module.AURKA=mod1$AURKA, data=data.nki, annot=annot.nki, do.mapping=TRUE, do.scale=TRUE, plot=TRUE, verbose=TRUE)
+str(scmod1.nki, max.level=1)
+table(scmod1.nki$subtype2)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

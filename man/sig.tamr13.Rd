@@ -5,7 +5,7 @@
 Tamoxifen Resistance signature composed of 13 gene clusters (TAMR13) as published by Loi et al. 2008.
 }
 \description{
-List of 13 clusters of genes (and anotations) and their corresponding coefficient as an additional attribute.
+List of 13 clusters of genes (and annotations) and their corresponding coefficient as an additional attribute.
 }
 \usage{data(sig.tamr13)}
 \format{

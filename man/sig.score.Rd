@@ -5,7 +5,7 @@
 Function to compute signature scores as linear combination of gene expressions
 }
 \description{
-This function computes a signature score from a gene list (aka gene signature), i.e. a signed average as published in Sotiriou et al. 2006 and Haibek-Kains et al. 2009.
+This function computes a signature score from a gene list (aka gene signature), i.e. a signed average as published in Sotiriou et al. 2006 and Haibe-Kains et al. 2009.
 }
 \usage{
 sig.score(x, data, annot, do.mapping = FALSE, mapping, size = 0, cutoff = NA, signed = TRUE, verbose = FALSE)

@@ -1,5 +1,7 @@
 \name{ssp2006}
 \alias{ssp2006}
+\alias{ssp2006.scale}
+\alias{ssp2006.robust}
 \docType{data}
 \title{
 SSP2006 classifier for identification of breast cancer molecular subtypes (Hu et al 2006)
@@ -7,7 +9,11 @@ SSP2006 classifier for identification of breast cancer molecular subtypes (Hu et
 \description{
 List of parameters defining the SSP2006 classifier for identification of breast cancer molecular subtypes (Hu et al 2006). 
 }
-\usage{data(ssp2006)}
+\usage{
+data(ssp2006)
+data(ssp2006.scale)
+data(ssp2006.robust)
+}
 \format{
 List of parameters for SSP2006:
 \describe{
@@ -19,9 +25,15 @@ List of parameters for SSP2006:
 \item{\code{mins} }{Minimum number of samples within each cluster allowed during the fitting of the model.}
 }
 }
-%%\details{
-%%  ~~ If necessary, more details than the __description__ above ~~
-%%}
+\details{ 
+Three versions of the model are provided, each of ones differs by the gene expressions standardization method since it has an important impact on the subtype classification:
+\describe{
+\item{\code{ssp2006} }{Gene expression centroids for each subtype.}
+\item{\code{ssp2006.scale} }{Mapping for centroids.}
+\item{\code{ssp2006.robust} }{Method of correlation used to compute distance to the centroids.}
+}
+The model \code{ssp2006.robust} has been shown to reach the best concordance with the traditional clinical parameters (ER IHC, HER2 IHC/FISH and histological grade). However the use of this model is recommended only when the dataset is representative of a global population of breast cancer patients (no sampling bias, the 5 subtypes should be present).
+}
 \source{
 \url{http://www.biomedcentral.com/1471-2164/7/96}
 }
@@ -31,5 +43,7 @@ Hu, Zhiyuan and Fan, Cheng and Oh, Daniel and Marron, JS and He, Xiaping and Qaq
 \examples{
 data(ssp2006)
 str(ssp2006)
+data(ssp2006.robust)
+str(ssp2006.robust)
 }
-\keyword{data}
+\keyword{datasets}

@@ -66,7 +66,7 @@ annots <- list("VDX"=annot2.vdx, "NKI"=annot2.nki)
 datas.mapped <- map.datasets(datas=datas, annots=annots, do.mapping=TRUE)
 ## define some prototypes
 protos <- paste("geneid", ginter[1:3], sep=".")
-## compute meta-estimate of correlation coefficients to ESR1, ERBB2 and AURKA
+## compute meta-estimate of correlation coefficients to the three prototype genes
 probecor <- compute.proto.cor.meta(datas=datas.mapped$datas, proto=protos, method="pearson")
 str(probecor)
 }

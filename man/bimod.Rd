@@ -48,12 +48,17 @@ Additional parameters to pass to \code{\link[genefu]{sig.score}}.
   \item{status1.proba }{Probability p to be of status 1, the probability to be of status 0 being 1-p.}
   \item{gaussians }{Matrix of parameters fitted in the mixture of two Gaussians. Matrix of NA values if EM algorithm did not converge.}
   \item{BIC }{Values (gene expressions or signature scores) used to identify bimodality.}
+	\item{BI }{Bimodality Index (BI) as defined by Wang et al., 2009.}
   \item{x }{Values (gene expressions or signature scores) used to identify bimodality.}
 }
 \references{
 Desmedt C, Haibe-Kains B, Wirapati P, Buyse M, Larsimont D, Bontempi G, Delorenzi M, Piccart M, and Sotiriou C (2008) "Biological processes associated with breast cancer clinical outcome depend on the molecular subtypes", \emph{Clinical Cancer Research}, \bold{14}(16):5158--5165.
 
 Wirapati P, Sotiriou C, Kunkel S, Farmer P, Pradervand S, Haibe-Kains B, Desmedt C, Ignatiadis M, Sengstag T, Schutz F, Goldstein DR, Piccart MJ and Delorenzi M (2008) "Meta-analysis of Gene-Expression Profiles in Breast Cancer: Toward a Unified Understanding of Breast Cancer Sub-typing and Prognosis Signatures", \emph{Breast Cancer Research}, \bold{10}(4):R65.
+
+Fraley C and Raftery E (2002) "Model-Based Clustering, Discriminant Analysis, and Density Estimation", \emph{Journal of American Statistical Asscoiation}, \bold{97}(458):611--631.
+
+Wang J, Wen S, Symmans FW, Pusztai L and Coombes KR (2009) "The bimodality index: a criterion for discovering and ranking bimodal signatures from cancer gene expression profiling data", \emph{Cancer Informatics}, \bold{7}:199--216.
 }
 \author{
 Benjamin Haibe-Kains
@@ -64,9 +69,9 @@ Benjamin Haibe-Kains
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
-%%\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-%%}
+\seealso{
+\code{\link[mclust]{Mclust}}
+}
 \examples{
 ## load NKI data
 data(nki)

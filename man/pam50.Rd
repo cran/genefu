@@ -1,5 +1,7 @@
 \name{pam50}
 \alias{pam50}
+\alias{pam50.scale}
+\alias{pam50.robust}
 \docType{data}
 \title{
 PAM50 classifier for identification of breast cancer molecular subtypes (Parker et al 2009)
@@ -7,7 +9,11 @@ PAM50 classifier for identification of breast cancer molecular subtypes (Parker 
 \description{
 List of parameters defining the PAM50 classifier for identification of breast cancer molecular subtypes (Parker et al 2009). 
 }
-\usage{data(pam50)}
+\usage{
+data(pam50)
+data(pam50.scale)
+data(pam50.robust)
+}
 \format{
 List of parameters for PAM50:
 \describe{
@@ -15,13 +21,19 @@ List of parameters for PAM50:
 \item{\code{centroids.map} }{Mapping for centroids.}
 \item{\code{method.cor} }{Method of correlation used to compute distance to the centroids.}
 \item{\code{method.centroids} }{Method used to compute the centroids.}
-\item{\code{std} }{Method of standardization for gene expressions.}
+\item{\code{std} }{Method of standardization for gene expressions ("none", "scale" or "robust").}
 \item{\code{mins} }{Minimum number of samples within each cluster allowed during the fitting of the model.}
 }
 }
-%%\details{
-%%  ~~ If necessary, more details than the __description__ above ~~
-%%}
+\details{ 
+Three versions of the model are provided, each of ones differs by the gene expressions standardization method since it has an important impact on the subtype classification:
+\describe{
+\item{\code{pam50} }{Gene expression centroids for each subtype.}
+\item{\code{pam50.scale} }{Mapping for centroids.}
+\item{\code{pam50.robust} }{Method of correlation used to compute distance to the centroids.}
+}
+The model \code{pam50.robust} has been shown to reach the best concordance with the traditional clinical parameters (ER IHC, HER2 IHC/FISH and histological grade). However the use of this model is recommended only when the dataset is representative of a global population of breast cancer patients (no sampling bias, the 5 subtypes should be present).
+}
 \source{
 \url{http://jco.ascopubs.org/cgi/content/short/JCO.2008.18.1370v1}
 }
@@ -31,5 +43,7 @@ Parker, Joel S. and Mullins, Michael and Cheang, Maggie C.U. and Leung, Samuel a
 \examples{
 data(pam50)
 str(pam50)
+data(pam50.robust)
+str(pam50.robust)
 }
-\keyword{data}
+\keyword{datasets}

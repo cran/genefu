@@ -118,11 +118,13 @@ function(data, annot, do.mapping=FALSE, mapping, std=c("scale", "robust", "none"
 		"tukey"={ cl.centroids[ ,i] <- apply(X=data[cl == i & !is.na(cl), ,drop=FALSE], MARGIN=2, FUN=tbrm, na.rm=TRUE, C=9) })
 	}
 	
-	#apply the nearest centroid classifier to classify the samples again
+	## apply the nearest centroid classifier to classify the samples again
 	ncor <- t(apply(X=data, MARGIN=1, FUN=function(x, y, z) { return(cor(x, y, method=z, use="complete.obs")) }, y=cl.centroids, z=method.cor))
-	nproba <- t(apply(X=ncor, MARGIN=1, FUN=function(x) { return(abs(x) / sum(abs(x), na.rm=TRUE)) }))
+	#nproba <- t(apply(X=ncor, MARGIN=1, FUN=function(x) { return(abs(x) / sum(abs(x), na.rm=TRUE)) }))
+	## negative correlations are truncated to zero since they have no meaning for subtypes identification
+	nproba <- t(apply(X=ncor, MARGIN=1, FUN=function(x) { x[x < 0] <- 0; return(x / sum(x, na.rm=TRUE)); }))
 	dimnames(ncor) <- dimnames(nproba) <- list(dimnames(data)[[1]], dimnames(cl.centroids)[[2]])
-	ncl <- apply(X=ncor, MARGIN=1, FUN=function(x) { return(order(x, decreasing=TRUE)[1]) })
+	ncl <- apply(X=ncor, MARGIN=1, FUN=function(x) { return(order(x, decreasing=TRUE, na.last=TRUE)[1]) })
 	ncl <- dimnames(cl.centroids)[[2]][ncl]
 	names(ncl) <- dimnames(data)[[1]]
 	

@@ -1,5 +1,7 @@
 \name{ssp2003}
 \alias{ssp2003}
+\alias{ssp2003.scale}
+\alias{ssp2003.robust}
 \docType{data}
 \title{
 SSP2003 classifier for identification of breast cancer molecular subtypes (Sorlie et al 2003)
@@ -7,7 +9,11 @@ SSP2003 classifier for identification of breast cancer molecular subtypes (Sorli
 \description{
 List of parameters defining the SSP2003 classifier for identification of breast cancer molecular subtypes (Sorlie et al 2003). 
 }
-\usage{data(ssp2003)}
+\usage{
+data(ssp2003)
+data(ssp2003.scale)
+data(ssp2003.robust)
+}
 \format{
 List of parameters for SSP2003:
 \describe{
@@ -19,9 +25,15 @@ List of parameters for SSP2003:
 \item{\code{mins} }{Minimum number of samples within each cluster allowed during the fitting of the model.}
 }
 }
-%%\details{
-%%  ~~ If necessary, more details than the __description__ above ~~
-%%}
+\details{ 
+Three versions of the model are provided, each of ones differs by the gene expressions standardization method since it has an important impact on the subtype classification:
+\describe{
+\item{\code{ssp2003} }{Gene expression centroids for each subtype.}
+\item{\code{ssp2003.scale} }{Mapping for centroids.}
+\item{\code{ssp2003.robust} }{Method of correlation used to compute distance to the centroids.}
+}
+The model \code{ssp2003.robust} has been shown to reach the best concordance with the traditional clinical parameters (ER IHC, HER2 IHC/FISH and histological grade). However the use of this model is recommended only when the dataset is representative of a global population of breast cancer patients (no sampling bias, the 5 subtypes should be present).
+}
 \source{
 \url{http://www.pnas.org/content/100/14/8418}
 }
@@ -31,5 +43,7 @@ T. Sorlie and R. Tibshirani and J. Parker and T. Hastie and J. S. Marron and A. 
 \examples{
 data(ssp2003)
 str(ssp2003)
+data(ssp2003.robust)
+str(ssp2003.robust)
 }
-\keyword{data}
+\keyword{datasets}

@@ -26,10 +26,14 @@ function(x, data, annot, do.mapping=FALSE, mapping, model=c("E", "V"), do.scale=
 		res[1, ] <- rr2$parameters$mean
 		res[2, ] <- rr2$parameters$variance$sigmasq
 		res[3, ] <- rr2$parameters$pro
+		
+		## bimodality index (BI)
+		smd <- abs(res[1, 2] - res[1, 1]) / sqrt((res[2, 2]^2 + res[2, 1]^2) / 2)
+		bi <- sqrt(res[3, 2] * (1 - res[3, 2])) * smd
 
 		#classification
 		mystatus[cc.ix] <- as.numeric(rr2$classification == 2)
 		mystatus.proba[cc.ix] <- rr2$z[ , 2, drop=TRUE]
 	}
-	return(list("status"=mystatus, "status1.proba"=mystatus.proba, "gaussians"=res, "BIC"=mybic,  "x"=dd))
+	return(list("status"=mystatus, "status1.proba"=mystatus.proba, "gaussians"=res, "BIC"=mybic,  "BI"=bi, "x"=dd))
 }

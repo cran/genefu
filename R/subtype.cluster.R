@@ -1,5 +1,5 @@
 `subtype.cluster` <-
-function(module.ESR1, module.ERBB2, module.AURKA, data, annot, do.mapping=FALSE, mapping, do.scale=TRUE, do.BIC=TRUE, plot=FALSE, filen, verbose=FALSE) {
+function(module.ESR1, module.ERBB2, module.AURKA, data, annot, do.mapping=FALSE, mapping, do.scale=TRUE, do.BIC=FALSE, plot=FALSE, filen, verbose=FALSE) {
 	require(mclust)
 	if(missing(data) || missing(annot)) { stop("data, and annot parameters must be specified") }
 	if(plot) { require(gplots) }

@@ -1,5 +1,6 @@
 `ps.cluster` <-
 function(cl.tr, cl.ts, na.rm=FALSE) {
+	## consider cl.ts as reference
 	if(length(cl.tr) != length(cl.ts)) { stop("the two clustering must have the same length!") }
 	if(is.null(names(cl.tr))) { names(cl.tr) <- names(cl.ts) <- paste("X", 1:length(cl.tr), sep=".") }
 	cc.ix <- complete.cases(cl.tr, cl.ts)
@@ -17,9 +18,19 @@ function(cl.tr, cl.ts, na.rm=FALSE) {
 		names(tt2) <- names(cl.tr)
 		return(list("ps"=0, "ps.cluster"=tt, "ps.individual"=tt2))
 	}
-	ll <- length(ucltr)
+	if(!all(ucltr == uclts)) { ## the number of clusters is the same but the labels differ
+		warning("the labels of the clusters differ!")
+		## keep labels from cl.ts
+		tixtr <- !is.element(ucltr, uclts)
+		tixts <- !is.element(uclts, ucltr)
+		for(mm in 1:sum(tixtr)) {
+			cltr[cltr == ucltr[which(tixtr)[mm]]] <- uclts[which(tixts)[mm]]
+		}
+		ucltr <- sort(unique(cltr))	
+	}
+	ll <- length(uclts)
 	
-	##co-membership matrix for the two clusterings
+	## co-membership matrix for the two clusterings
 	Dtr <- matrix(NA, nrow=nn, ncol=nn, dimnames=list(names(cltr), names(cltr)))
 	Dts <- matrix(NA, nrow=nn, ncol=nn, dimnames=list(names(clts), names(clts)))
 	for(i in 1:(nn-1)) {
@@ -29,8 +40,8 @@ function(cl.tr, cl.ts, na.rm=FALSE) {
 		}
 	}
 	
-	nltr <- table(cltr)[ucltr]
-	nlts <- table(clts)[uclts]
+	nltr <- table(cltr)[as.character(ucltr)]
+	nlts <- table(clts)[as.character(uclts)]
 	myps <- NULL
 	for(l in 1:ll) {
 		al <- which(clts == uclts[l])

@@ -8,7 +8,7 @@ Function to identify breast cancer molecular subtypes using the Single Sample Pr
 This function identifies the breast cancer molecular subtypes using a Single Sample Predictor (SSP) fitted by \code{\link[genefu]{intrinsic.cluster}}.
 }
 \usage{
-intrinsic.cluster.predict(sbt.model, data, annot, do.mapping = FALSE, mapping, do.prediction.strength = TRUE, logged2 = TRUE, verbose = FALSE)
+intrinsic.cluster.predict(sbt.model, data, annot, do.mapping = FALSE, mapping, do.prediction.strength = FALSE, logged2 = TRUE, verbose = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

@@ -1,5 +1,5 @@
 `subtype.cluster.predict` <-
-function(sbt.model, data, annot, do.mapping=FALSE, mapping, do.scale=TRUE, do.prediction.strength=TRUE, do.BIC=TRUE, plot=FALSE, verbose=FALSE) {
+function(sbt.model, data, annot, do.mapping=FALSE, mapping, do.scale=TRUE, do.prediction.strength=FALSE, do.BIC=FALSE, plot=FALSE, verbose=FALSE) {
 	require(mclust)
 	if(missing(data) || missing(annot)) { stop("data, and annot parameters must be specified") }
 	if(plot) { require(gplots) }

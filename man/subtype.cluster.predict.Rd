@@ -8,7 +8,7 @@ Function to identify breast cancer molecular subtypes using the Subtype Clusteri
 This function identifies the breast cancer molecular subtypes using a Subtype Clustering Model fitted by \code{\link[genefu]{subtype.cluster}}.
 }
 \usage{
-subtype.cluster.predict(sbt.model, data, annot, do.mapping = FALSE, mapping, do.scale = TRUE, do.prediction.strength = TRUE, do.BIC = TRUE, plot = FALSE, verbose = FALSE)
+subtype.cluster.predict(sbt.model, data, annot, do.mapping = FALSE, mapping, do.scale = TRUE, do.prediction.strength = FALSE, do.BIC = FALSE, plot = FALSE, verbose = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -72,16 +72,16 @@ Benjamin Haibe-Kains
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link[genefu]{subtype.cluster}}, \code{\link[genefu]{sbtmod1}}, \code{\link[genefu]{sbtmod2}}
+\code{\link[genefu]{subtype.cluster}}, \code{\link[genefu]{scmod1}}, \code{\link[genefu]{scmod2}}
 }
 \examples{
 ## load Subtype Clustering Model fitted on VDX
-data(sbtmod1)
+data(scmod1)
 ## load NKI data
 data(nki)
 ## Subtype Clustering Model fitted on VDX and applied on NKI
-sbtmod1.nki <- subtype.cluster.predict(sbt.model=sbtmod1, data=data.nki, annot=annot.nki, do.mapping=TRUE, do.scale=TRUE, do.prediction.strength=FALSE, do.BIC=FALSE, plot=TRUE, verbose=TRUE)
-table(sbtmod1.nki$subtype)
+scmod1.nki <- subtype.cluster.predict(sbt.model=scmod1, data=data.nki, annot=annot.nki, do.mapping=TRUE, do.scale=TRUE, do.prediction.strength=FALSE, do.BIC=FALSE, plot=TRUE, verbose=TRUE)
+table(scmod1.nki$subtype)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

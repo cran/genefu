@@ -1,5 +1,5 @@
 `intrinsic.cluster.predict` <-
-function(sbt.model, data, annot, do.mapping=FALSE, mapping, do.prediction.strength=TRUE, logged2=TRUE, verbose=FALSE) {
+function(sbt.model, data, annot, do.mapping=FALSE, mapping, do.prediction.strength=FALSE, logged2=TRUE, verbose=FALSE) {
 
 	if(missing(data) || missing(annot) || missing(sbt.model)) { stop("data, annot and sbt.mod parameters must be specified") }
 	if (!is.matrix(data)) { data <- as.matrix(data) }
@@ -110,18 +110,23 @@ function(sbt.model, data, annot, do.mapping=FALSE, mapping, do.prediction.streng
 	}, 
 	"none"={ if(verbose) { cat("no standardization of the gene expressions\n") } })
 	
-	#apply the nearest centroid classifier to classify the samples again
+	## apply the nearest centroid classifier to classify the samples again
 	ncor <- t(apply(X=data, MARGIN=1, FUN=function(x, y, method.cor) { return(cor(x, y, method=method.cor, use="complete.obs")) }, y=centroids, method.cor=method.cor))
-	nproba <- t(apply(X=ncor, MARGIN=1, FUN=function(x) { return(abs(x) / sum(abs(x), na.rm=TRUE)) }))
+	#nproba <- t(apply(X=ncor, MARGIN=1, FUN=function(x) { return(abs(x) / sum(abs(x), na.rm=TRUE)) }))
+	## negative correlations are truncated to zero since they have no meaning for subtypes identification
+	nproba <- t(apply(X=ncor, MARGIN=1, FUN=function(x) { x[x < 0] <- 0; return(x / sum(x, na.rm=TRUE)); }))
 	dimnames(ncor) <- dimnames(nproba) <- list(dimnames(data)[[1]], name.cluster)
-	ncl <- apply(X=ncor, MARGIN=1, FUN=function(x) { return(order(x, decreasing=TRUE)[1]) })
+	ncl <- apply(X=ncor, MARGIN=1, FUN=function(x) { return(order(x, decreasing=TRUE, na.last=TRUE)[1]) })
 	names(ncl) <- dimnames(data)[[1]]
+	## names of identified clusters
+	ncln <- name.cluster[ncl]
+	names(ncln) <- dimnames(data)[[1]]
 	
 	## if one or more subtypes have not been identified, remove them for prediction strength
 	myx <- sort(unique(ncl))
 	myx <- myx[!is.na(myx)]
-	name.cluster <- name.cluster[myx]
-	number.cluster <- length(myx)
+	name.cluster2 <- name.cluster[myx]
+	number.cluster2 <- length(myx)
 	
 	ps.res <- ncl2 <- NULL
 	if(do.prediction.strength) {
@@ -129,23 +134,23 @@ function(sbt.model, data, annot, do.mapping=FALSE, mapping, do.prediction.streng
 		## hierarchical clustering with correlation-based distance and average linkage
 		hcl <- hcluster(x=data, method="correlation", link="average")
 		mins.ok <- stop.ok <- FALSE
-		nbc <- number.cluster
+		nbc <- number.cluster2
 		nclust.best <- 1
 		while(!mins.ok && !stop.ok) { ## until each cluster contains at least mins samples
 			cl <- cutree(tree=hcl, k=nbc)
 			tt <- table(cl)
-			if(sum(tt >= mins) >= number.cluster) {
-				if(nbc > number.cluster) { ## put NA for clusters with less than mins samples
+			if(sum(tt >= mins) >= number.cluster2) {
+				if(nbc > number.cluster2) { ## put NA for clusters with less than mins samples
 					td <- names(tt)[tt < mins]
 					cl[is.element(cl, td)] <- NA
 					## rename the clusters
 					ucl <- sort(unique(cl))
 					ucl <- ucl[!is.na(ucl)]
 					cl2 <- cl
-					for(i in 1:number.cluster) { cl2[cl == ucl[i] & !is.na(cl)] <- i }
+					for(i in 1:number.cluster2) { cl2[cl == ucl[i] & !is.na(cl)] <- i }
 					cl <- cl2
 				}
-				nclust.best <- number.cluster
+				nclust.best <- number.cluster2
 				mins.ok <- TRUE
 			} else {
 				if(sum(tt >= mins) > nclust.best) {
@@ -153,8 +158,8 @@ function(sbt.model, data, annot, do.mapping=FALSE, mapping, do.prediction.streng
 					nclust.best <- sum(tt >= mins)
 				}
 				nbc <- nbc + 1
-				if(nbc > (nrow(data) - (number.cluster * mins))) {
-					warning(sprintf("impossible to find %i main clusters wit at least %i individuals!", number.cluster, mins))
+				if(nbc > (nrow(data) - (number.cluster2 * mins))) {
+					warning(sprintf("impossible to find %i main clusters with at least %i individuals!", number.cluster2, mins))
 					stop.ok <- TRUE
 				}
 			}
@@ -190,12 +195,29 @@ function(sbt.model, data, annot, do.mapping=FALSE, mapping, do.prediction.streng
 		dimnames(ncor2) <- dimnames(nproba2) <- list(dimnames(data)[[1]], dimnames(cl.centroids)[[2]])
 		ncl2 <- apply(X=ncor2, MARGIN=1, FUN=function(x) { return(order(x, decreasing=TRUE)[1]) })
 		names(ncl2) <- dimnames(data)[[1]]
+		## rename clusters since we do not expect to get the same id per cluster
+		## this avoids a warning in ps.cluster
+		uncl <- sort(unique(ncl))
+		uncl <- uncl[!is.na(uncl)]
+		nclt <- ncl
+		for(mm in 1:length(uncl)) {
+			nclt[ncl == uncl[mm]] <- mm
+		}
+		uncl2 <- sort(unique(ncl2))
+		uncl2 <- uncl2[!is.na(uncl2)]
+		ncl2t <- ncl2
+		for(mm in 1:length(uncl2)) {
+			ncl2t[ncl2 == uncl2[mm]] <- mm
+		}
 		#prediction strength
-		ps.res <- ps.cluster(cl.tr=ncl2, cl.ts=ncl, na.rm=TRUE)
-		names(ps.res$ps.cluster) <- name.cluster
+		ps.res <- ps.cluster(cl.tr=ncl2t, cl.ts=nclt, na.rm=TRUE)
+		## put NA for clusters which are potentially not present in the dataset
+		tt <- rep(NA, length(name.cluster))
+		names(tt) <- name.cluster
+		tt[name.cluster2] <- ps.res$ps.cluster
+		ps.res$ps.cluster <- tt
 	}
-	ncl <- name.cluster[ncl]
-	names(ncl) <- dimnames(data)[[1]]
 	
-	return(list("subtype"=ncl, "subtype.proba"=nproba, "cor"=ncor, "prediction.strength"=ps.res, "subtype.train"=ncl2, "centroids.map"=centroids.map, "profiles"=data))
+	
+	return(list("subtype"=ncln, "subtype.proba"=nproba, "cor"=ncor, "prediction.strength"=ps.res, "subtype.train"=ncl2, "centroids.map"=centroids.map, "profiles"=data))
 }
